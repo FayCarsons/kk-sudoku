@@ -72,12 +72,15 @@ pub fun board/parse(chars : vector<char>) : exn board
       else
         throw("Unexpected char '" ++ char.string ++ "'")
 
+
 // Print the board as a grid with box borders. Unsolved cells show as `·`.
-pub fun board/print(self : board) : <console, exn> ()
+pub fun board/show(self : board) : exn string
   fun symbol(x : int, y : int) : exn string
-    match self.get(Position(x, y))
-      Solved(n)   -> n.show
-      Unsolved(_) -> "·"
+    val cell = self.get(Position(x, y))
+    if cell.is-solved then 
+      cell.first.show 
+    else 
+      "."
 
   fun row(y : int) : exn string
     val boxes = list(0, 8, 3).map fn(x0) list(x0, x0 + 2).map(fn(x) symbol(x, y)).join(" ")
@@ -87,6 +90,9 @@ pub fun board/print(self : board) : <console, exn> ()
     left ++ "─".repeat(7).replicate(3).join(mid) ++ right
 
   val bands = list(0, 8, 3).map fn(y0) list(y0, y0 + 2).map(row).unlines
-  border("┌", "┬", "┐").println
-  bands.join("\n" ++ border("├", "┼", "┤") ++ "\n").println
-  border("└", "┴", "┘").println
+  border("┌", "┬", "┐") 
+    ++ "\n" 
+    ++ bands.join("\n" ++ border("├", "┼", "┤") ++ "\n")
+    ++ "\n"
+    ++ border("└", "┴", "┘")
+    ++ "\n"
