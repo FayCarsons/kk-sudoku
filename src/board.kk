@@ -2,6 +2,7 @@ module board
 
 import cell
 import iterator
+import std/core/unsafe
 
 pub value struct position
   x : int
@@ -50,13 +51,15 @@ pub fun board/all() : iterator<position> ()
       yield(Position(x, y))
 
 pub fun board/get(^self : board, ^pos : position) : exn cell
+  with unsafe-total
   self[into-one-dim(pos.x,pos.y)]
 
 pub fun board/assign(self : board, ^pos : position, ^f : cell -> cell) : exn board
-  var local := self
-  val idx = into-one-dim(pos.x, pos.y)
-  local[idx] := f(self[idx])
-  local
+  unsafe-total fn()
+    var local := self
+    val idx = into-one-dim(pos.x, pos.y)
+    local[idx] := f(self[idx])
+    local
 
 pub fun board/parse(chars : vector<char>) : exn board
   chars.map fn(char)

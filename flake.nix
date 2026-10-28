@@ -19,9 +19,23 @@
           default = koka;
         };
 
-        devShells.default = pkgs.mkShell {
-          packages = [ inputs.self.packages.${system}.koka ];
-        };
+        devShells.default =
+          with pkgs;
+          mkShell {
+            packages = [
+              inputs.self.packages.${system}.koka
+              vhs
+              # VHS starts `bash` from PATH; the default one lacks readline and prints prompt escapes literally
+              bashInteractive
+            ];
+
+            benchmark = writeShellScriptBin "bench" ''
+              koka -O2 -isrc -c src/main.kk -o .koka/sudoku
+              chmod +x .koka/sudoku
+              hyperfine --warmup 1 --runs 5 .koka/sudoku
+            '';
+
+          };
       }
     );
 }
