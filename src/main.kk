@@ -8,7 +8,8 @@ import std/core/unsafe
 import cell
 import board
 import iterator
-import pedagogy
+import pedagogy/trace
+import pedagogy/replay
 
 fun todo() : exn a
   throw("TODO")
