@@ -268,7 +268,7 @@ fun junctions(line : int) : (char, char, char, char)
 // The guesses on the search path, outermost first
 fun canvas/draw-path(self : canvas, path : list<guess>, depth : int) : canvas
   val header = self.text(0, panel-col, "GUESSES", heading)
-  if path.is-nil then header.text(1, panel-col + 1, if depth == 0 then "none needed" else "none yet", plain.fg(gruvbox/gray))
+  if path.is-nil then header.text(1, panel-col + 1, if depth == 0 then "none" else "empty", plain.fg(gruvbox/gray))
   else
     val rows = path-rows(depth)
     val shown = if path.length > rows then path.take(rows - 1) else path

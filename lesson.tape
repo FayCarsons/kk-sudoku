@@ -1,12 +1,12 @@
-# Records the lesson for board 1 of puzzles/easy50.txt to lesson.gif; run `vhs lesson.tape` inside the dev shell
+# Records the lesson for board 33 of puzzles/easy50.txt to lesson.gif; run `vhs lesson.tape` inside the dev shell
 Output lesson.gif
 
 Set Shell "bash"
 Set FontFamily "Berkeley Mono"
 Set FontSize 16
 Set Theme "GruvboxDark"
-# The lesson draws an 80×22 frame, so the terminal must be at least that big
-Set Width 860
+# The lesson draws an 80×22 frame; 880×520 gives 81×24, and any narrower wraps every line
+Set Width 880
 Set Height 520
 Set Padding 20
 Set TypingSpeed 40ms
@@ -18,30 +18,42 @@ Enter
 Wait@3m
 Show
 
-Type ".koka/sudoku --lesson=1"
+Type ".koka/sudoku --lesson=33"
 Sleep 400ms
 Enter
 
-# At 1x, clearing the givens from their peers takes about 4 seconds, then forced placements begin
-Sleep 6s
-
-# Pause on step 36, a forced placement; step forward three, then back one
+# Off camera, pause and rewind to step 1, so the timings below count from a known step
+Hide
+Sleep 500ms
 Space
-Sleep 1.5s
-Right
-Sleep 800ms
-Right
-Sleep 800ms
-Right
-Sleep 800ms
-Left
-Sleep 1.5s
+Left 5
+Sleep 200ms
+Show
 
-# Resume at 2x; the last 43 steps take about 6.5 seconds, then the replay pauses on the solved board
+# Show the puzzle, then play the 32 removals at 2x
+Sleep 1.5s
 Type "+"
 Sleep 500ms
 Space
-Sleep 9s
+
+# Drop to 1x just before the first guess, at step 33
+Sleep 2.2s
+Type "-"
+
+# Three nested guesses at 1x; pause on step 59, where the last candidate of the third guess fails
+Sleep 13.4s
+Space
+Sleep 2s
+
+# Step to 60: both inner guesses are dropped, and the outer one tries its other candidate
+Right
+Sleep 3s
+
+# Finish at 4x; the last 48 steps take about 4 seconds, then the replay pauses on the solved board
+Type "++"
+Sleep 500ms
+Space
+Sleep 6.5s
 
 Type "q"
 Sleep 1s
